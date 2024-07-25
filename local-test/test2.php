@@ -9,17 +9,17 @@ if ($jpg === false) {
 }
 
 $convert_time = time();
-$lep = convert_jpeg_to_lepton($jpg, 1);
+$lep = convert_jpeg_to_lepton($jpg);
 if ($lep === null) {
     die('Failed to convert jpeg to lepton.');
 }
-print('Convert time (max 1 thread): ' . (time() - $convert_time) . 's' . PHP_EOL);
+print('Convert time (max 4 thread): ' . (time() - $convert_time) . 's' . PHP_EOL);
 file_put_contents($lep_path, $lep);
 
 $deconvert_time = time();
-$jpg2 = convert_lepton_to_jpeg($lep, 1);
+$jpg2 = convert_lepton_to_jpeg($lep);
 if ($jpg2 === null) {
     die('Failed to convert lepton to jpeg.');
 }
-print('De-convert time (max 1 thread): ' . (time() - $deconvert_time) . 's' . PHP_EOL);
+print('De-convert time (max 4 thread): ' . (time() - $deconvert_time) . 's' . PHP_EOL);
 file_put_contents($jpg2_path, $jpg2);

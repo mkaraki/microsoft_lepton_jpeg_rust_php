@@ -5,7 +5,7 @@ use lepton_jpeg::*;
 use lepton_jpeg::enabled_features::EnabledFeatures;
 
 #[php_function]
-pub fn convert_lepton_to_jpeg(lepton: Binary<u8>) -> Option<Binary<u8>> {
+pub fn convert_lepton_to_jpeg(lepton: Binary<u8>, max_threads: Option<u32>) -> Option<Binary<u8>> {
     let input_lepton: Vec<u8> = Vec::from(lepton);
     let input_size: usize = input_lepton.len();
 
@@ -16,7 +16,7 @@ pub fn convert_lepton_to_jpeg(lepton: Binary<u8>) -> Option<Binary<u8>> {
     match decode_lepton(
         &mut reader,
         &mut output_buffer,
-        4,
+        max_threads.unwrap_or(4) as usize,
     ) {
         Ok(_) => {
             Some(Binary::from(output_buffer))
@@ -26,7 +26,7 @@ pub fn convert_lepton_to_jpeg(lepton: Binary<u8>) -> Option<Binary<u8>> {
 }
 
 #[php_function]
-pub fn convert_jpeg_to_lepton(lepton: Binary<u8>) -> Option<Binary<u8>> {
+pub fn convert_jpeg_to_lepton(lepton: Binary<u8>, max_threads: Option<u32>) -> Option<Binary<u8>> {
     let input_jpeg: Vec<u8> = Vec::from(lepton);
     let input_size: usize = input_jpeg.len();
     let mut reader = std::io::Cursor::new(input_jpeg);
@@ -43,7 +43,7 @@ pub fn convert_jpeg_to_lepton(lepton: Binary<u8>) -> Option<Binary<u8>> {
     match encode_lepton(
         &mut reader,
         &mut writer,
-        4,
+        max_threads.unwrap_or(4) as usize,
         &enabled_features,
     ) {
         Ok(_) => {
