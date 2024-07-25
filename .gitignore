@@ -1,0 +1,4 @@
+/target
+/local-test/*
+!/local-test/*.php
+/.history
