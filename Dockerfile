@@ -16,4 +16,7 @@ RUN export PHP_EXTENSION_DIR=$(php-config --extension-dir)
 RUN export PHP_INI_DIR=$(php-config --ini-dir)
 
 COPY --from=builder /usr/src/app/target/release/libmicrosoft_lepton_jpeg_rust_php.so $PHP_EXTENSION_DIR/ms-lepton.so
+COPY --from=builder /usr/src/app/target/release/libmicrosoft_lepton_jpeg_rust_php.so /pack/ms-lepton.so
+
 COPY php.conf.d/20-ms-lepton.ini $PHP_INI_DIR/20-ms-lepton.ini
+COPY php.conf.d/20-ms-lepton.ini /pack/20-ms-lepton.ini
