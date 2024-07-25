@@ -53,6 +53,28 @@ pub fn convert_jpeg_to_lepton(lepton: Binary<u8>, max_threads: Option<u32>) -> O
     }
 }
 
+#[php_function]
+pub fn convert_jpeg_to_lepton_with_verify(lepton: Binary<u8>, max_threads: Option<u32>) -> Option<Binary<u8>> {
+    let input_jpeg: Vec<u8> = Vec::from(lepton);
+
+    let enabled_features = EnabledFeatures {
+        progressive: true,
+        max_jpeg_width: 16386,
+        max_jpeg_height: 16386,
+    };
+
+    match encode_lepton_verify(
+        &input_jpeg,
+        max_threads.unwrap_or(4) as usize,
+        &enabled_features,
+    ) {
+        Ok(v) => {
+            Some(Binary::from(v.0))
+        },
+        Err(_) => None,
+    }
+}
+
 #[php_module]
 pub fn get_module(module: ModuleBuilder) -> ModuleBuilder {
     module
